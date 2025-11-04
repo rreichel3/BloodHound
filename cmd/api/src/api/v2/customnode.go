@@ -72,8 +72,8 @@ func validateCreateCustomNodeRequest(customNodeKindRequest CreateCustomNodeReque
 }
 
 func validateConfig(config model.CustomNodeKindConfig) error {
-	if config.Icon.Type != "font-awesome" {
-		return fmt.Errorf("invalid icon type. only Font Awesome icons are supported")
+	if config.Icon.Type != "font-awesome" && config.Icon.Type != "svg" {
+		return fmt.Errorf("invalid icon type. supported types are: 'font-awesome' and 'svg'")
 	} else if !validColorString.MatchString(config.Icon.Color) && config.Icon.Color != "" {
 		return fmt.Errorf("icon color must be a valid hexadecimal color string starting with '#' followed by 3 or 6 hex digits")
 	}

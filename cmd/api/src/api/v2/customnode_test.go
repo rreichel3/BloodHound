@@ -93,7 +93,7 @@ func TestResources_CreateCustomNodeKindsTest(t *testing.T) {
 			setupMocks: func(t *testing.T, mocks *mock) {},
 			expected: expected{
 				responseCode:   http.StatusBadRequest,
-				responseBody:   `{"errors":[{"context":"","message":"BadRequest: invalid icon type. only Font Awesome icons are supported"}],"http_status":400,"request_id":"","timestamp":"0001-01-01T00:00:00Z"}`,
+				responseBody:   `{"errors":[{"context":"","message":"BadRequest: invalid icon type. supported types are: 'font-awesome' and 'svg'"}],"http_status":400,"request_id":"","timestamp":"0001-01-01T00:00:00Z"}`,
 				responseHeader: http.Header{"Content-Type": []string{"application/json"}},
 			},
 		},
@@ -205,6 +205,60 @@ func TestResources_CreateCustomNodeKindsTest(t *testing.T) {
 			expected: expected{
 				responseCode:   http.StatusCreated,
 				responseBody:   `{"data":[{"id":1,"kindName":"KindA","config":{"icon":{"type":"font-awesome","name":"coffee","color":"#FFFFFF"}}},{"id":2,"kindName":"KindB","config":{"icon":{"type":"font-awesome","name":"house","color":"#000"}}}]}`,
+				responseHeader: http.Header{"Content-Type": []string{"application/json"}},
+			},
+		},
+		{
+			name: "Success: created custom node kinds with SVG icons",
+			buildRequest: func() *http.Request {
+				request := &http.Request{
+					URL: &url.URL{
+						Path: "/api/v2/custom-nodes",
+					},
+					Method: http.MethodPost,
+					Header: http.Header{},
+				}
+
+				payload := &v2.CreateCustomNodeRequest{
+					CustomTypes: map[string]model.CustomNodeKindConfig{
+						"CustomSVGKind": {
+							Icon: model.CustomNodeIcon{
+								Type:  "svg",
+								Name:  "https://example.com/icon.svg",
+								Color: "#FF5733",
+							},
+						},
+					},
+				}
+				jsonPayload, err := json.Marshal(payload)
+				if err != nil {
+					t.Fatalf("error occurred while marshaling payload necessary for test: %v", err)
+				}
+
+				request.Header.Add(headers.ContentType.String(), "application/json")
+				request.Body = io.NopCloser(bytes.NewReader(jsonPayload))
+
+				return request
+			},
+			setupMocks: func(t *testing.T, mocks *mock) {
+				t.Helper()
+				mocks.mockDatabase.EXPECT().CreateCustomNodeKinds(gomock.Any(), gomock.Any()).Return(model.CustomNodeKinds{
+					{
+						ID:       1,
+						KindName: "CustomSVGKind",
+						Config: model.CustomNodeKindConfig{
+							Icon: model.CustomNodeIcon{
+								Type:  "svg",
+								Name:  "https://example.com/icon.svg",
+								Color: "#FF5733",
+							},
+						},
+					},
+				}, nil)
+			},
+			expected: expected{
+				responseCode:   http.StatusCreated,
+				responseBody:   `{"data":[{"id":1,"kindName":"CustomSVGKind","config":{"icon":{"type":"svg","name":"https://example.com/icon.svg","color":"#FF5733"}}}]}`,
 				responseHeader: http.Header{"Content-Type": []string{"application/json"}},
 			},
 		},
@@ -336,7 +390,7 @@ func TestResources_UpdateCustomNodeKindsTest(t *testing.T) {
 			setupMocks: func(t *testing.T, mocks *mock) {},
 			expected: expected{
 				responseCode:   http.StatusBadRequest,
-				responseBody:   `{"errors":[{"context":"","message":"BadRequest: invalid icon type. only Font Awesome icons are supported"}],"http_status":400,"request_id":"","timestamp":"0001-01-01T00:00:00Z"}`,
+				responseBody:   `{"errors":[{"context":"","message":"BadRequest: invalid icon type. supported types are: 'font-awesome' and 'svg'"}],"http_status":400,"request_id":"","timestamp":"0001-01-01T00:00:00Z"}`,
 				responseHeader: http.Header{"Content-Type": []string{"application/json"}},
 			},
 		},
