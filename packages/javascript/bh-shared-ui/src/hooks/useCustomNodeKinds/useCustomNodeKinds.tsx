@@ -40,7 +40,7 @@ export const getCustomNodeKinds = async (options: RequestOptions): Promise<IconD
                 } else if (iconType === 'font-awesome') {
                     // For FontAwesome icons, look up the icon definition
                     const iconDefinition = findIconDefinition({ prefix: 'fas', iconName: iconName });
-                    if (iconDefinition == undefined) {
+                    if (iconDefinition === undefined) {
                         return;
                     }
 
