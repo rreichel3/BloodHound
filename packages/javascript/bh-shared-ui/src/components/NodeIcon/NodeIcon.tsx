@@ -56,11 +56,26 @@ const NodeIcon: React.FC<NodeIconProps> = ({ nodeType }) => {
     const icon = GetIconInfo(nodeType, customIcons);
     const classes = useStyles({ icon });
 
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        // If the image fails to load, hide it and it will fallback to showing nothing
+        // (the background color will still be visible)
+        e.currentTarget.style.display = 'none';
+    };
+
     return (
         <Tooltip title={nodeType || ''} describeChild={true}>
             <Box className={classes.root}>
                 <Box className={classes.container}>
-                    <FontAwesomeIcon icon={icon.icon} transform='shrink-2' />
+                    {icon.url ? (
+                        <img
+                            src={icon.url}
+                            alt={nodeType || 'Custom node icon'}
+                            style={{ width: '18px', height: '18px' }}
+                            onError={handleImageError}
+                        />
+                    ) : (
+                        <FontAwesomeIcon icon={icon.icon} transform='shrink-2' />
+                    )}
                 </Box>
             </Box>
         </Tooltip>
