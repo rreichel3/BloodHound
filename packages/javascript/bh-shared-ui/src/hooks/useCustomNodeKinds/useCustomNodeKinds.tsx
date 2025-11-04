@@ -18,7 +18,7 @@ import { findIconDefinition, IconName } from '@fortawesome/fontawesome-svg-core'
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { RequestOptions } from 'js-client-library';
 import { useQuery, UseQueryResult } from 'react-query';
-import { apiClient, DEFAULT_ICON_BACKGROUND_COLOR, GenericQueryOptions, IconDictionary } from '../utils';
+import { apiClient, DEFAULT_ICON_BACKGROUND_COLOR, GenericQueryOptions, IconDictionary } from '../../utils';
 
 export const getCustomNodeKinds = async (options: RequestOptions): Promise<IconDictionary> =>
     apiClient.getCustomNodeKinds(options).then((res) => {
