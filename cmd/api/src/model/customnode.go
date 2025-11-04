@@ -53,10 +53,16 @@ type CustomNodeKindConfig struct {
 	Icon CustomNodeIcon `json:"icon"`
 }
 
+// CustomNodeIcon defines the icon configuration for a custom node kind.
+// Two icon types are supported:
+//   - "font-awesome": Name should be a valid FontAwesome icon name (e.g., "coffee", "user")
+//   - "svg": Name should be a URL pointing to an SVG file (e.g., "https://example.com/icon.svg")
+//
+// Color is a hex color string (e.g., "#FFFFFF") that sets the background color of the icon.
 type CustomNodeIcon struct {
-	Type  string `json:"type"`
-	Name  string `json:"name"`
-	Color string `json:"color"`
+	Type  string `json:"type"`  // Icon type: "font-awesome" or "svg"
+	Name  string `json:"name"`  // FontAwesome icon name or SVG URL
+	Color string `json:"color"` // Hex color string for background
 }
 
 func (s *CustomNodeKindConfig) Scan(value interface{}) error {

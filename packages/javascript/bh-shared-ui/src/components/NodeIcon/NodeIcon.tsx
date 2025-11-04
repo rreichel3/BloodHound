@@ -60,7 +60,11 @@ const NodeIcon: React.FC<NodeIconProps> = ({ nodeType }) => {
         <Tooltip title={nodeType || ''} describeChild={true}>
             <Box className={classes.root}>
                 <Box className={classes.container}>
-                    <FontAwesomeIcon icon={icon.icon} transform='shrink-2' />
+                    {icon.url ? (
+                        <img src={icon.url} alt={nodeType} style={{ width: '18px', height: '18px' }} />
+                    ) : (
+                        <FontAwesomeIcon icon={icon.icon} transform='shrink-2' />
+                    )}
                 </Box>
             </Box>
         </Tooltip>
